@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: dev_project_management
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    platform: linux/arm64
+
+  backend:
+    build: ./backend
+    platform: linux/arm64
+    volumes:
+      - ./backend:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=development
+      - RAILS_MASTER_KEY=${RAILS_DEVELOPMENT_MASTER_KEY}
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3001:3000"
+    environment:
+      - WATCHPACK_POLLING=true
+    platform: linux/arm64
+
+volumes:
+  postgres_data:

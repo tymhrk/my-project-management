@@ -1,0 +1,16 @@
+# --- Common ---
+.DS_Store
+node_modules/
+
+# --- Backend (Rails) ---
+backend/log/*.log
+backend/tmp/
+backend/db/*.sqlite3
+backend/public/assets
+.env
+
+# --- Frontend (Next.js) ---
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.env*

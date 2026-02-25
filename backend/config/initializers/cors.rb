@@ -1,0 +1,10 @@
+Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  allow do
+    # 通信を許可する相手（Next.jsのURL）を指定します
+    origins "http://localhost:3001"
+
+    resource "*",
+      headers: :any,
+      methods: [:get, :post, :put, :patch, :delete, :options, :head]
+  end
+end
