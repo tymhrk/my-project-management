@@ -21,6 +21,7 @@ services:
     environment:
       - RAILS_ENV=development
       - RAILS_MASTER_KEY=${RAILS_DEVELOPMENT_MASTER_KEY}
+      - FRONTEND_URL=http://localhost:3001
     depends_on:
       - db
 
@@ -33,6 +34,8 @@ services:
       - "3001:3000"
     environment:
       - WATCHPACK_POLLING=true
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://localhost:3000}
+      - INTERNAL_API_URL=${INTERNAL_API_URL:-http://backend:3000}
     platform: linux/arm64
 
 volumes:

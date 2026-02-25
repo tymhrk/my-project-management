@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    @projects = Project.all
+    @projects = Project.all.order(created_at: :desc)
     render json: @projects
   end
 
@@ -23,16 +23,16 @@ class ProjectsController < ApplicationController
   def update
     project = Project.find(params[:id])
     if project.update(project_params)
-      render json: project
+      head :no_content
     else
-      render json: project.errors, status: :unprocessable_entity
+      render json: { errors: project.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def destroy
     project = Project.find(params[:id])
     project.destroy
-    render json: { message: "削除しました" }
+    head :no_content
   end
 
   private
