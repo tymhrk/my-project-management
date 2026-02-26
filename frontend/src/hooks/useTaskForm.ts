@@ -2,14 +2,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { apiClient } from "@/lib/apiClient";
-import { Project } from "@/types";
+import { Task } from "@/types";
 
-export const useProjectForm = (initialData?: Project) => {
+export const useTaskForm = (projectId: string, initialData?: Task) => {
   const router = useRouter();
-  const [name, setName] = useState(initialData?.name || "");
-  const [description, setDescription] = useState(
-    initialData?.description || "",
-  );
+  const [title, setTitle] = useState(initialData?.title || "");
+  const [content, setContent] = useState(initialData?.content || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [showConfirm, setShowConfirm] = useState(false);
@@ -20,8 +18,8 @@ export const useProjectForm = (initialData?: Project) => {
   };
 
   const executeSubmit = async () => {
-    if (!name.trim()) {
-      toast.error("プロジェクト名を入力してください");
+    if (!title.trim()) {
+      toast.error("タスク名を入力してください");
       return;
     }
 
@@ -29,22 +27,22 @@ export const useProjectForm = (initialData?: Project) => {
     try {
       const method = initialData ? "PATCH" : "POST";
       const endpoint = initialData
-        ? `/projects/${initialData.id}`
-        : "/projects";
+        ? `/tasks/${initialData.id}`
+        : `/projects/${projectId}/tasks`;
 
       setShowConfirm(false);
 
       await apiClient(endpoint, {
         method,
-        body: JSON.stringify({ name, description }),
+        body: JSON.stringify({ title, content }),
       });
 
       toast.success(initialData ? "更新しました！" : "作成しました！");
 
-      if (!initialData) setName("");
-      if (!initialData) setDescription("");
-
-      router.push("/projects");
+      if (!initialData) setTitle("");
+      if (!initialData) setContent("");
+      console.log("projectId:", projectId);
+      router.push(`/projects/${projectId}`);
       router.refresh();
     } catch (error) {
       if (error instanceof Error) {
@@ -56,10 +54,10 @@ export const useProjectForm = (initialData?: Project) => {
   };
 
   return {
-    name,
-    setName,
-    description,
-    setDescription,
+    title,
+    setTitle,
+    content,
+    setContent,
     preSubmit,
     executeSubmit,
     isSubmitting,

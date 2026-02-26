@@ -1,6 +1,7 @@
 const NEXT_PUBLIC_API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
-const INTERNAL_API_URL = process.env.INTERNAL_API_URL || "http://backend:3000";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
+const INTERNAL_API_URL =
+  process.env.INTERNAL_API_URL || "http://backend:3000/api/v1";
 
 async function getBaseUrl() {
   return typeof window === "undefined" ? INTERNAL_API_URL : NEXT_PUBLIC_API_URL;

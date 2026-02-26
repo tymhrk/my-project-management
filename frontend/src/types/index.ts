@@ -10,3 +10,11 @@ export interface ProjectInput {
   name: string;
   description?: string;
 }
+export interface Task {
+  id: string;
+  project_id: string;
+  title: string;
+  content?: string;
+  status: "todo" | "doing" | "done";
+  created_at: string;
+}

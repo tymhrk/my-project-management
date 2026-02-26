@@ -1,7 +1,7 @@
 import { apiClient } from "@/lib/apiClient";
 import { Project } from "@/types";
 import ProjectForm from "@/components/ProjectForm";
-import ProjectItem from "@/components/ProjectItem";
+import ProjectList from "@/components/ProjectList";
 
 async function getProjects(): Promise<Project[]> {
   return await apiClient<Project[]>("/projects", { cache: "no-store" });
@@ -14,25 +14,19 @@ export default async function ProjectsPage() {
     <main className="max-w-5xl mx-auto p-8">
       <div className="mb-10 text-center md:text-left">
         <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">
-          Projects
+          プロジェクト管理
         </h1>
         <p className="text-slate-500 mt-2">
           進行中のプロジェクトを管理しましょう
         </p>
       </div>
-
-      {/* md:flex-row で、フォーム(左)・一覧(右)の並びにする */}
       <div className="flex flex-col md:flex-row gap-10">
-        {/* 左側：新規フォーム（幅を固定） */}
         <div className="w-full md:w-80 shrink-0">
           <div className="sticky top-8">
             {" "}
-            {/* スクロールしてもフォームがついてくるように */}
             <ProjectForm />
           </div>
         </div>
-
-        {/* 右側：一覧 */}
         <div className="flex-1">
           {projects.length === 0 ? (
             <div className="text-center py-20 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
@@ -43,9 +37,7 @@ export default async function ProjectsPage() {
             </div>
           ) : (
             <div className="grid gap-4">
-              {projects.map((project) => (
-                <ProjectItem key={project.id} project={project} />
-              ))}
+              <ProjectList initialProjects={projects} />
             </div>
           )}
         </div>
