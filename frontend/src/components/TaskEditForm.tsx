@@ -81,7 +81,7 @@ export default function TaskEditForm({
                 disabled={isSubmitting || !title.trim()}
                 className="flex-1 px-6 py-3 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 disabled:bg-gray-300 transition-all"
               >
-                {isSubmitting ? "作成中..." : "タスクを作成"}
+                {isSubmitting ? "更新中..." : "タスクを更新"}
               </button>
             </div>
           </form>

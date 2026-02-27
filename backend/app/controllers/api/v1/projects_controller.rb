@@ -1,7 +1,7 @@
 class Api::V1::ProjectsController < ApplicationController
   def index
     @projects = Project.all.order(created_at: :desc)
-    render json: @projects
+    render json: @projects.as_json(methods: :tasks_count)
   end
 
   def show

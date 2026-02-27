@@ -1,7 +1,5 @@
-# backend/Dockerfile
 FROM ruby:3.4.2-slim
 
-# libyaml-dev を追加しました
 RUN apt-get update -qq && \
     apt-get install -y --no-install-recommends \
       build-essential \
