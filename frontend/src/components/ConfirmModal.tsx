@@ -8,6 +8,7 @@ type Props = {
   message: string;
   confirmText: string;
   isSubmitting: boolean;
+  children?: React.ReactNode;
 };
 
 export default function ConfirmModal({
@@ -18,6 +19,7 @@ export default function ConfirmModal({
   message,
   confirmText,
   isSubmitting,
+  children,
 }: Props) {
   if (!isOpen) return null;
 
@@ -26,6 +28,7 @@ export default function ConfirmModal({
       <div className="bg-white rounded-2xl p-8 max-w-sm w-full shadow-xl animate-in fade-in zoom-in duration-200">
         <h3 className="text-xl font-bold text-slate-900 mb-2">{title}</h3>
         <p className="text-slate-500 mb-6 whitespace-pre-wrap">{message}</p>
+        <div className="max-h-[60vh] overflow-y-auto">{children}</div>
 
         <div className="flex gap-3">
           <button

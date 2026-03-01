@@ -21,6 +21,7 @@ services:
     environment:
       - RAILS_ENV=development
       - RAILS_MASTER_KEY=${RAILS_DEVELOPMENT_MASTER_KEY}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
       - FRONTEND_URL=http://localhost:3001
     depends_on:
       - db

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { apiClient } from "@/lib/apiClient";
 import { Project, Task } from "@/types";
-import TaskList from "@/components/TaskList";
+import TaskSection from "@/components/TaskSection";
 
 async function getProject(id: string) {
   return await apiClient<Project>(`/projects/${id}`, { cache: "no-store" });
@@ -50,13 +50,9 @@ export default async function ProjectDetail({
             </Link>
           </div>
         </div>
-
-        {/* メインカード：タスク詳細と同じ rounded-2xl & shadow & border */}
         <div className="bg-white rounded-4xl shadow-sm border border-gray-200 overflow-hidden mb-8">
-          {/* ヘッダー部分：スクショのような薄いグレーの背景 */}
           <div className="p-8 border-b border-gray-100 bg-white">
             <div className="mb-4">
-              {/* プロジェクトということを示すラベル（タスクのTODOバッジの位置） */}
               <span className="px-3 py-1 bg-blue-500 text-white text-xs font-bold rounded-full uppercase">
                 PROJECT
               </span>
@@ -65,8 +61,6 @@ export default async function ProjectDetail({
               {project.name}
             </h1>
           </div>
-
-          {/* コンテンツ部分：内容 (CONTENT) のラベルと余白 */}
           <div className="p-8 min-h-40">
             <h2 className="text-xs font-bold text-gray-300 uppercase tracking-[0.2em] mb-6">
               内容
@@ -75,8 +69,6 @@ export default async function ProjectDetail({
               {project.description || "説明なし"}
             </p>
           </div>
-
-          {/* フッター部分：スクショのような薄グレーの背景と左右のメタ情報 */}
           <div className="px-8 py-4 bg-gray-50/50 border-t border-gray-100 flex justify-between items-center text-[10px] text-gray-400 font-medium tracking-wider uppercase">
             <div className="flex gap-2">
               <span>プロジェクトID:</span>
@@ -88,19 +80,7 @@ export default async function ProjectDetail({
           </div>
         </div>
 
-        {/* --- タスクセクション --- */}
-        <div className="space-y-6">
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold">タスク</h2>
-            <Link
-              href={`/projects/${id}/tasks/new`}
-              className="px-4 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
-            >
-              + タスクを追加
-            </Link>
-          </div>
-          <TaskList initialTasks={tasks} projectId={id} />
-        </div>
+        <TaskSection projectId={id} initialTasks={tasks} />
       </div>
     </div>
   );

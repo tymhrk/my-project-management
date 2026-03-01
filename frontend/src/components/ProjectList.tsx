@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { Project } from "@/types";
 import DeleteButton from "./DeleteButton";
-
 interface ProjectListProps {
   initialProjects: Project[];
 }

@@ -5,6 +5,7 @@ RUN apt-get update -qq && \
       build-essential \
       libpq-dev \
       libyaml-dev \
+      libcurl4 \
       git \
       tzdata && \
     rm -rf /var/lib/apt/lists/*

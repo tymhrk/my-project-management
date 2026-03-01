@@ -11,6 +11,7 @@ export interface ProjectInput {
   name: string;
   description?: string;
 }
+
 export interface Task {
   id: string;
   project_id: string;
@@ -18,4 +19,8 @@ export interface Task {
   content?: string;
   status: "todo" | "doing" | "done";
   created_at: string;
+}
+
+export interface AiTask {
+  title: string;
 }
