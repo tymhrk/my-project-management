@@ -1,4 +1,4 @@
-class Api::V1::TasksController < ApplicationController
+class Api::V1::TasksController < Api::V1::BaseController
   # 1. フィルターの整理
   before_action :set_project, only: [ :index, :create ]
   before_action :set_task, only: [ :show, :update, :destroy ]

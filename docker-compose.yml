@@ -21,6 +21,7 @@ services:
     environment:
       - RAILS_ENV=development
       - RAILS_MASTER_KEY=${RAILS_DEVELOPMENT_MASTER_KEY}
+      - INTERNAL_API_KEY=${INTERNAL_API_KEY}
       - USE_AI_MOCK=${USE_AI_MOCK}
       - FRONTEND_URL=http://localhost:3001
       - TZ=Asia/Tokyo

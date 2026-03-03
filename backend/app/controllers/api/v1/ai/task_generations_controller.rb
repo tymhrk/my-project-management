@@ -1,5 +1,5 @@
 module Api::V1
-  class Ai::TaskGenerationsController < ApplicationController
+  class Ai::TaskGenerationsController < Api::V1::BaseController
     def create
       project = Project.find(params[:project_id])
 

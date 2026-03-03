@@ -8,7 +8,7 @@ module Api::V1::Ai::Clients
 
       response = @client.chat(
         parameters: {
-          model: model,
+          model: model, 
           messages: [
             { role: "system", content: system_prompt },
             { role: "user", content: "Project: #{project_name}" }

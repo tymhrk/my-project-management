@@ -1,4 +1,4 @@
-class Api::V1::ProjectsController < ApplicationController
+class Api::V1::ProjectsController < Api::V1::BaseController
   def index
     @projects = Project.all.order(created_at: :desc)
     render json: @projects.as_json(methods: :tasks_count)

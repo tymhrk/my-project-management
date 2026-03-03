@@ -14,7 +14,11 @@ export async function apiClient<T>(
   const baseUrl = await getBaseUrl();
   const res = await fetch(`${baseUrl}${endpoint}`, {
     ...options,
-    headers: { "Content-Type": "application/json", ...options.headers },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.INTERNAL_API_KEY}`,
+      ...options.headers,
+    },
   });
 
   if (!res.ok) {
