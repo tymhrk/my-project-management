@@ -8,7 +8,7 @@ backend/log/*.log
 backend/tmp/
 backend/db/*.sqlite3
 backend/public/assets
-.env.local
+.env
 
 # --- Frontend (Next.js) ---
 frontend/.next/

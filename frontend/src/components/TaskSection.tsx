@@ -7,7 +7,6 @@ import ProjectAiButton from "./ProjectAiButton";
 import TaskList from "./TaskList";
 import ConfirmModal from "./ConfirmModal";
 import { Task, AiTask } from "@/types";
-import { apiClient } from "@/lib/apiClient";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -31,15 +30,21 @@ export default function TaskSection({ projectId, initialTasks }: Props) {
 
     setIsSubmitting(true);
     try {
-      await apiClient(`/projects/${projectId}/tasks/bulk_create`, {
+      const response = await fetch("/api/tasks/bulk", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          projectId,
           tasks: aiTasks.map((t) => ({
             name: t.name,
             description: t.description || "",
           })),
         }),
       });
+
+      if (!response.ok) {
+        throw new Error("一括登録に失敗しました");
+      }
 
       setIsModalOpen(false);
       setAiTasks([]);

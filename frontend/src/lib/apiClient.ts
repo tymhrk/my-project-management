@@ -12,13 +12,19 @@ export async function apiClient<T>(
   options: RequestInit = {},
 ): Promise<T> {
   const baseUrl = await getBaseUrl();
+  const headers = new Headers(options.headers);
+
+  if (!headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  if (typeof window === "undefined" && process.env.INTERNAL_API_KEY) {
+    headers.set("Authorization", `Bearer ${process.env.INTERNAL_API_KEY}`);
+  }
+
   const res = await fetch(`${baseUrl}${endpoint}`, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.INTERNAL_API_KEY}`,
-      ...options.headers,
-    },
+    headers,
   });
 
   if (!res.ok) {

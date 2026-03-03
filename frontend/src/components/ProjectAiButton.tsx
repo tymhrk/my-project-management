@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { generateAiTasks } from "@/lib/generateAiTasks";
 import { AiTask } from "@/types";
 import toast from "react-hot-toast";
 
@@ -18,7 +17,14 @@ export default function ProjectAiButton({ projectId, onSuccess }: Props) {
 
     setLoading(true);
     try {
-      const aiTasks = await generateAiTasks(projectId);
+      const response = await fetch("/api/tasks/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId }),
+      });
+
+      const data = await response.json();
+      const aiTasks = data.tasks;
 
       if (aiTasks && aiTasks.length > 0) {
         onSuccess(aiTasks);
