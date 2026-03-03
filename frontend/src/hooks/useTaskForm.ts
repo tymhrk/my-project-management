@@ -6,8 +6,10 @@ import { Task } from "@/types";
 
 export const useTaskForm = (projectId: string, initialData?: Task) => {
   const router = useRouter();
-  const [title, setTitle] = useState(initialData?.title || "");
-  const [content, setContent] = useState(initialData?.content || "");
+  const [name, setName] = useState(initialData?.name || "");
+  const [description, setDescription] = useState(
+    initialData?.description || "",
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [showConfirm, setShowConfirm] = useState(false);
@@ -18,7 +20,7 @@ export const useTaskForm = (projectId: string, initialData?: Task) => {
   };
 
   const executeSubmit = async () => {
-    if (!title.trim()) {
+    if (!name.trim()) {
       toast.error("タスク名を入力してください");
       return;
     }
@@ -34,13 +36,13 @@ export const useTaskForm = (projectId: string, initialData?: Task) => {
 
       await apiClient(endpoint, {
         method,
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ name, description }),
       });
 
       toast.success(initialData ? "更新しました！" : "作成しました！");
 
-      if (!initialData) setTitle("");
-      if (!initialData) setContent("");
+      if (!initialData) setName("");
+      if (!initialData) setDescription("");
       console.log("projectId:", projectId);
       router.push(`/projects/${projectId}`);
       router.refresh();
@@ -54,10 +56,10 @@ export const useTaskForm = (projectId: string, initialData?: Task) => {
   };
 
   return {
-    title,
-    setTitle,
-    content,
-    setContent,
+    name,
+    setName,
+    description,
+    setDescription,
     preSubmit,
     executeSubmit,
     isSubmitting,

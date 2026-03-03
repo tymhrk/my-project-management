@@ -84,6 +84,7 @@ export default function DeleteButton({
         title={title}
         message={message}
         confirmText="削除する"
+        variant="danger"
         isSubmitting={isDeleting}
       />
     </>

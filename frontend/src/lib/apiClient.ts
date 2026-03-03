@@ -27,3 +27,16 @@ export async function apiClient<T>(
   if (res.status === 204) return {} as T;
   return res.json();
 }
+
+export async function bulkCreateTasks(
+  projectId: string,
+  tasks: { name: string; description: string }[],
+): Promise<{ message: string }> {
+  return apiClient<{ message: string }>(
+    `/projects/${projectId}/tasks/bulk_create`,
+    {
+      method: "POST",
+      body: JSON.stringify({ tasks }),
+    },
+  );
+}

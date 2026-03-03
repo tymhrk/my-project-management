@@ -8,6 +8,7 @@ import TaskList from "./TaskList";
 import ConfirmModal from "./ConfirmModal";
 import { Task, AiTask } from "@/types";
 import { apiClient } from "@/lib/apiClient";
+import toast from "react-hot-toast";
 
 type Props = {
   projectId: string;
@@ -26,21 +27,29 @@ export default function TaskSection({ projectId, initialTasks }: Props) {
   };
 
   const handleConfirmSave = async () => {
+    if (aiTasks.length === 0) return;
+
     setIsSubmitting(true);
     try {
-      await apiClient(`/ai/projects/${projectId}/save_tasks`, {
+      await apiClient(`/projects/${projectId}/tasks/bulk_create`, {
         method: "POST",
         body: JSON.stringify({
-          project_id: projectId,
-          task_names: aiTasks.map((t) => t.title),
+          tasks: aiTasks.map((t) => ({
+            name: t.name,
+            description: t.description || "",
+          })),
         }),
       });
+
       setIsModalOpen(false);
+      setAiTasks([]);
 
       router.refresh();
-      alert("タスクを一括登録しました！");
-    } catch {
-      alert("保存に失敗しました");
+
+      toast.success("タスクを一括登録しました！");
+    } catch (error) {
+      console.error("タスク一括登録に失敗しました。:", error);
+      toast.error("タスク一括登録に失敗しました。");
     } finally {
       setIsSubmitting(false);
     }
@@ -58,32 +67,44 @@ export default function TaskSection({ projectId, initialTasks }: Props) {
             + タスクを追加
           </Link>
 
+          {/* AI連携ボタン */}
           <ProjectAiButton projectId={projectId} onSuccess={handleAiSuccess} />
         </div>
       </div>
 
+      {/* タスク一覧表示 */}
       <TaskList initialTasks={initialTasks} projectId={projectId} />
 
+      {/* AI提案確認モーダル */}
       <ConfirmModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleConfirmSave}
         title="AIからの提案タスク"
-        message="以下のタスクをプロジェクトに登録しますか？"
-        confirmText="一括登録する"
+        message="以下のタスクをプロジェクトに一括登録しますか？"
+        confirmText={isSubmitting ? "保存中..." : "一括登録する"}
         isSubmitting={isSubmitting}
       >
-        <ul className="space-y-2 mt-4 mb-5">
-          {aiTasks.map((task, idx) => (
-            <li
-              key={idx}
-              className="p-3 bg-gray-50 rounded-lg text-sm text-gray-700 border border-gray-100"
-            >
-              <span className="text-blue-500 mr-2 font-bold">・</span>
-              {task.title}
-            </li>
-          ))}
-        </ul>
+        <div className="mt-4 mb-5 max-h-[40vh] overflow-y-auto pr-2">
+          <ul className="space-y-3">
+            {aiTasks.map((task, idx) => (
+              <li
+                key={idx}
+                className="p-3 bg-gray-50 rounded-lg text-sm border border-gray-100 shadow-sm"
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-purple-500 font-bold">✨</span>
+                  <span className="font-bold text-gray-800">{task.name}</span>
+                </div>
+                {task.description && (
+                  <p className="text-gray-600 text-[12px] leading-relaxed ml-6">
+                    {task.description}
+                  </p>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
       </ConfirmModal>
     </div>
   );

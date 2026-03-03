@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useProjectForm } from "@/hooks/useProjectForm";
 import ConfirmModal from "./ConfirmModal";
 
@@ -18,8 +19,13 @@ export default function ProjectForm() {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-8">
+      <Link
+        href="/projects"
+        className="text-sm text-gray-400 hover:text-gray-600 mb-6 inline-block transition-colors"
+      >
+        ← キャンセルして戻る
+      </Link>
       <h2 className="text-xl font-bold mb-4">新しいプロジェクト</h2>
-
       <form onSubmit={preSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-semibold text-slate-700 mb-1">

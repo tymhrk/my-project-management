@@ -8,6 +8,7 @@ type Props = {
   message: string;
   confirmText: string;
   isSubmitting: boolean;
+  variant?: "primary" | "danger";
   children?: React.ReactNode;
 };
 
@@ -19,8 +20,13 @@ export default function ConfirmModal({
   message,
   confirmText,
   isSubmitting,
+  variant = "primary",
   children,
 }: Props) {
+  const buttonColor =
+    variant === "danger"
+      ? "bg-red-600 hover:bg-red-700 disabled:bg-red-400"
+      : "bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400";
   if (!isOpen) return null;
 
   return (
@@ -43,7 +49,7 @@ export default function ConfirmModal({
             type="button"
             onClick={onConfirm}
             disabled={isSubmitting}
-            className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 disabled:bg-blue-400 transition-colors"
+            className={`flex-1 py-3 text-white rounded-xl font-semibold transition-colors ${buttonColor}`}
           >
             {isSubmitting ? "処理中..." : confirmText}
           </button>

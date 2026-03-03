@@ -14,10 +14,10 @@ export default function TaskEditForm({
   initialdata?: Task;
 }) {
   const {
-    title,
-    setTitle,
-    content,
-    setContent,
+    name,
+    setName,
+    description,
+    setDescription,
     preSubmit,
     executeSubmit,
     isSubmitting,
@@ -47,8 +47,8 @@ export default function TaskEditForm({
               </label>
               <input
                 type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 placeholder="何をしますか？"
                 required
@@ -60,8 +60,8 @@ export default function TaskEditForm({
                 メモ（任意）
               </label>
               <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                 placeholder="詳細な手順など"
                 rows={3}
@@ -78,7 +78,7 @@ export default function TaskEditForm({
               </button>
               <button
                 type="submit"
-                disabled={isSubmitting || !title.trim()}
+                disabled={isSubmitting || !name.trim()}
                 className="flex-1 px-6 py-3 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 disabled:bg-gray-300 transition-all"
               >
                 {isSubmitting ? "更新中..." : "タスクを更新"}

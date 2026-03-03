@@ -3,15 +3,19 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :ai do
         resources :projects, only: [] do
-          resources :task_generations, only: [:create]
+          resources :task_generations, only: [ :create ]
         end
       end
 
       resources :projects do
-        resources :tasks, only: [:index, :create]
+        resources :tasks, only: [ :index, :create ] do
+          collection do
+            post :bulk_create
+          end
+        end
       end
 
-      resources :tasks, only: [:show, :update, :destroy]
+      resources :tasks, only: [ :show, :update, :destroy ]
     end
   end
 

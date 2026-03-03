@@ -18,16 +18,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_26_043452) do
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
-    t.string "name"
+    t.string "name", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "tasks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.text "content"
     t.datetime "created_at", null: false
+    t.text "description"
+    t.string "name", null: false
     t.uuid "project_id", null: false
-    t.integer "status"
-    t.string "title"
+    t.integer "status", default: 0
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_tasks_on_project_id"
   end

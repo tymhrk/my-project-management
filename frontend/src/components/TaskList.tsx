@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Task } from "@/types";
 import { apiClient } from "@/lib/apiClient";
 import toast from "react-hot-toast";
@@ -13,6 +13,10 @@ interface TaskListProps {
 
 export default function TaskList({ initialTasks, projectId }: TaskListProps) {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
+
+  useEffect(() => {
+    setTasks(initialTasks);
+  }, [initialTasks]);
 
   const toggleStatus = async (task: Task) => {
     const nextStatusMap: Record<string, Task["status"]> = {
@@ -69,7 +73,7 @@ export default function TaskList({ initialTasks, projectId }: TaskListProps) {
                   href={`/projects/${projectId}/tasks/${task.id}`}
                   className="font-medium text-gray-900 hover:text-blue-600 transition-colors"
                 >
-                  {task.title}
+                  {task.name}
                 </Link>
               </h3>
               <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">

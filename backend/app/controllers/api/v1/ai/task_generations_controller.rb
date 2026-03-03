@@ -1,30 +1,19 @@
-module Api
-  module V1
-    module Ai
-      class TaskGenerationsController < ApplicationController
-        def create
-          project = Project.find(params[:project_id])
-          tasks = Ai::Clients::GeminiClient.new.generate_tasks(project_name: project.name)
+module Api::V1
+  class Ai::TaskGenerationsController < ApplicationController
+    def create
+      project = Project.find(params[:project_id])
 
-          render json: { tasks: parse_response(tasks) }
-        end
+      generator = Ai::Clients::AiTaskGeneratorClient.new
+      suggested_tasks = generator.generate(project.name)
 
-        private
-
-        def parse_response(response)
-          candidate = response["candidates"]&.first
-          return [] unless candidate
-
-          text = candidate.dig("content", "parts", 0, "text")
-          return [] unless text
-
-          cleaned = text.gsub(/\A```json\s*|\s*```?\z/, "")
-
-          JSON.parse(cleaned)
-        rescue JSON::ParserError
-          []
-        end
+      if suggested_tasks.blank?
+        render json: { error: "Failed to generate tasks" }, status: :service_unavailable
+      else
+        render json: suggested_tasks
       end
+    rescue => e
+      Rails.logger.error "TaskGenerationsController Error: #{e.message}"
+      render json: { error: "Internal server error" }, status: :internal_server_error
     end
   end
 end
