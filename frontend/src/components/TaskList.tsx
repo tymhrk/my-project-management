@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { Task } from "@/types";
-import { apiClient } from "@/lib/apiClient";
 import toast from "react-hot-toast";
 import Link from "next/link";
-import DeleteButton from "./DeleteButton";
+import DeleteButton from "@/components/DeleteButton";
+import { saveAction } from "@/lib/actions";
 interface TaskListProps {
   initialTasks: Task[];
   projectId: string;
@@ -27,15 +27,22 @@ export default function TaskList({ initialTasks, projectId }: TaskListProps) {
     const newStatus = nextStatusMap[task.status];
 
     try {
-      const updatedTask = await apiClient<Task>(`/tasks/${task.id}`, {
-        method: "PATCH",
-        body: JSON.stringify({ task: { status: newStatus } }),
+      const result = await saveAction(`/tasks/${task.id}`, "PATCH", {
+        task: { status: newStatus },
       });
 
-      setTasks(tasks.map((t) => (t.id === task.id ? updatedTask : t)));
-      toast.success(`ステータスを ${newStatus} に更新しました`);
+      if (result.success) {
+        setTasks(
+          tasks.map((t) =>
+            t.id === task.id ? { ...t, status: newStatus } : t,
+          ),
+        );
+        toast.success(`ステータスを ${newStatus} に更新しました`);
+      } else {
+        toast.error(result.error || "更新に失敗しました");
+      }
     } catch {
-      toast.error("更新に失敗しました");
+      toast.error("予期せぬエラーが発生しました");
     }
   };
 

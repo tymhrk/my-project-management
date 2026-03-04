@@ -2,6 +2,7 @@ import Link from "next/link";
 import { apiClient } from "@/lib/apiClient";
 import { Project, Task } from "@/types";
 import TaskSection from "@/components/TaskSection";
+import DeleteButton from "@/components/DeleteButton";
 
 async function getProject(id: string) {
   return await apiClient<Project>(`/projects/${id}`, { cache: "no-store" });
@@ -41,13 +42,20 @@ export default async function ProjectDetail({
           >
             ← 一覧に戻る
           </Link>
-          <div className="flex gap-2">
+          <div className="flex items-center justify-end gap-4">
             <Link
               href={`/projects/${id}/edit`}
               className="px-4 py-2 bg-white border border-gray-200 text-gray-600 text-sm rounded-lg hover:bg-gray-50 transition-colors"
             >
               編集
             </Link>
+            <DeleteButton
+              endpoint={`/projects/${project.id}`}
+              redirectPath="/projects"
+              variant="text"
+              title="プロジェクトの削除"
+              message={`「${project.name}」を削除しますか？`}
+            />
           </div>
         </div>
         <div className="bg-white rounded-4xl shadow-sm border border-gray-200 overflow-hidden mb-8">

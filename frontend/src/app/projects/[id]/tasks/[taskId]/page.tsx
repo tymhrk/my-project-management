@@ -13,13 +13,12 @@ export default async function TaskDetailPage({
 
   return (
     <div className="max-w-3xl mx-auto p-6">
-      {/* ナビゲーション */}
       <div className="mb-6">
         <Link
           href={`/projects/${id}`}
           className="text-blue-600 hover:underline text-sm"
         >
-          ← プロジェクトに戻る
+          ← プロジェクト詳細に戻る
         </Link>
       </div>
 
@@ -39,7 +38,7 @@ export default async function TaskDetailPage({
               {task.status}
             </span>
           </div>
-          <h1 className="text-3xl font-bold text-gray-900">{task.title}</h1>
+          <h1 className="text-3xl font-bold text-gray-900">{task.name}</h1>
         </div>
 
         {/* コンテンツ部分 */}
@@ -48,7 +47,7 @@ export default async function TaskDetailPage({
             内容
           </h2>
           <div className="text-gray-700 whitespace-pre-wrap leading-relaxed min-h-200px]">
-            {task.content || (
+            {task.description || (
               <span className="text-gray-400 italic">
                 内容が入力されていません。
               </span>

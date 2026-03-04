@@ -93,7 +93,7 @@ export default function ProjectForm() {
         onClose={() => setShowConfirm(false)}
         onConfirm={executeSubmit}
         title="新規登録の確認"
-        message="この内容でプロジェクトを登録しますか？"
+        message={`プロジェクト「${name}」を登録しますか？`}
         confirmText="登録する"
         isSubmitting={isSubmitting}
       />

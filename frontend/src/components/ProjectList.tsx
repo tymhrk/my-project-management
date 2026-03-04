@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import { Project } from "@/types";
-import DeleteButton from "./DeleteButton";
+import DeleteButton from "@/components/DeleteButton";
 interface ProjectListProps {
   initialProjects: Project[];
 }
@@ -179,7 +179,6 @@ export default function ProjectList({ initialProjects }: ProjectListProps) {
                 </Link>
 
                 <DeleteButton
-                  // 1. 削除対象のパスを明示（Railsのルートに合わせる）
                   endpoint={`/projects/${project.id}`}
                   title="プロジェクトの削除"
                   message={`「${project.name}」を削除しますか？`}

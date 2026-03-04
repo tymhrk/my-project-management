@@ -90,7 +90,7 @@ export default function TaskForm({
             onClose={() => setShowConfirm(false)}
             onConfirm={executeSubmit}
             title="新規登録の確認"
-            message="この内容でタスクを登録しますか？"
+            message={`タスク「${name}」を登録しますか？`}
             confirmText="登録する"
             isSubmitting={isSubmitting}
           />
