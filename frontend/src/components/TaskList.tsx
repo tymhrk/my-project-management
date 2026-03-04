@@ -105,6 +105,7 @@ export default function TaskList({ initialTasks, projectId }: TaskListProps) {
             <DeleteButton
               endpoint={`/tasks/${task.id}`}
               message="タスクを削除しますか？"
+              redirectPath={`/projects/${projectId}`}
               onSuccess={() => {
                 setTasks((prev) => prev.filter((t) => t.id !== task.id));
               }}

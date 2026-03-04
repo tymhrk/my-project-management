@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { apiClient } from "@/lib/apiClient";
+import { saveAction } from "@/lib/actions";
 import { Project } from "@/types";
 
 export const useProjectForm = (initialData?: Project) => {
@@ -11,7 +11,6 @@ export const useProjectForm = (initialData?: Project) => {
     initialData?.description || "",
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [showConfirm, setShowConfirm] = useState(false);
 
   const preSubmit = (e: React.FormEvent) => {
@@ -32,24 +31,30 @@ export const useProjectForm = (initialData?: Project) => {
         ? `/projects/${initialData.id}`
         : "/projects";
 
+      const payload = {
+        project: {
+          name,
+          description,
+        },
+      };
+
       setShowConfirm(false);
 
-      await apiClient(endpoint, {
-        method,
-        body: JSON.stringify({ name, description }),
-      });
+      const result = await saveAction(endpoint, method, payload);
+      if (result.success) {
+        toast.success(initialData ? "更新しました！" : "作成しました！");
 
-      toast.success(initialData ? "更新しました！" : "作成しました！");
+        if (!initialData) {
+          setName("");
+          setDescription("");
+        }
 
-      if (!initialData) setName("");
-      if (!initialData) setDescription("");
-
-      router.push("/projects");
-      router.refresh();
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
+        router.push("/projects");
+      } else {
+        toast.error(result.error || "保存に失敗しました");
       }
+    } catch {
+      toast.error("予期せぬエラーが発生しました");
     } finally {
       setIsSubmitting(false);
     }

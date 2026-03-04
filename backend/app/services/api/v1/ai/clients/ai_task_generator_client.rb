@@ -4,11 +4,9 @@ module Api::V1::Ai::Clients
       # 環境変数（.env）でモックに切替
       return mock_response if ENV["USE_AI_MOCK"] == "true"
 
-      model = Rails.application.credentials.dig(:open_router, :model) || "google/gemini-2.0-flash-001"
-
       response = @client.chat(
         parameters: {
-          model: model, 
+          model: ENV["AI_MODEL_NAME"] || "google/gemini-2.0-flash-001", 
           messages: [
             { role: "system", content: system_prompt },
             { role: "user", content: "Project: #{project_name}" }

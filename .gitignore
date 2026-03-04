@@ -1,17 +1,38 @@
-# --- Common ---
-.vscode/
+# ==========================================
+# 2026 Project Management App Gitignore
+# ==========================================
+
+# --- OS & IDE ---
 .DS_Store
-node_modules/
+.vscode/
+.idea/
+*.swp
 
 # --- Backend (Rails) ---
+backend/.env
 backend/log/*.log
 backend/tmp/
-backend/db/*.sqlite3
+backend/storage/
 backend/public/assets
-.env
+backend/vendor/bundle
+
+# 重要：マスターキーは絶対上げない
+backend/config/master.key
+backend/config/credentials/*.key
+
+# SQLiteを使わなくても念のため（Neon/Postgresに一本化するため）
+backend/db/*.sqlite3
+backend/db/*.sqlite3-journal
 
 # --- Frontend (Next.js) ---
+frontend/node_modules/
 frontend/.next/
 frontend/out/
 frontend/build/
+# Vercelの環境変数は管理画面で設定するため、ローカルの.envは無視
 frontend/.env*
+
+# --- Deployment / Misc ---
+.env
+.env.local
+node_modules/

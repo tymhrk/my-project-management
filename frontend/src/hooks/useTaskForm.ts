@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { apiClient } from "@/lib/apiClient";
+import { saveAction } from "@/lib/actions";
 import { Task } from "@/types";
 
 export const useTaskForm = (projectId: string, initialData?: Task) => {
@@ -11,7 +11,6 @@ export const useTaskForm = (projectId: string, initialData?: Task) => {
     initialData?.description || "",
   );
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [showConfirm, setShowConfirm] = useState(false);
 
   const preSubmit = (e: React.FormEvent) => {
@@ -26,30 +25,37 @@ export const useTaskForm = (projectId: string, initialData?: Task) => {
     }
 
     setIsSubmitting(true);
+
     try {
       const method = initialData ? "PATCH" : "POST";
       const endpoint = initialData
         ? `/tasks/${initialData.id}`
         : `/projects/${projectId}/tasks`;
 
+      const payload = {
+        task: {
+          name,
+          description,
+        },
+      };
+
       setShowConfirm(false);
 
-      await apiClient(endpoint, {
-        method,
-        body: JSON.stringify({ name, description }),
-      });
+      const result = await saveAction(endpoint, method, payload);
+      if (result.success) {
+        toast.success(initialData ? "更新しました！" : "作成しました！");
 
-      toast.success(initialData ? "更新しました！" : "作成しました！");
+        if (!initialData) {
+          setName("");
+          setDescription("");
+        }
 
-      if (!initialData) setName("");
-      if (!initialData) setDescription("");
-      console.log("projectId:", projectId);
-      router.push(`/projects/${projectId}`);
-      router.refresh();
-    } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message);
+        router.push(`/projects/${projectId}`);
+      } else {
+        toast.error(result.error || "保存に失敗しました");
       }
+    } catch {
+      toast.error("予期せぬエラーが発生しました");
     } finally {
       setIsSubmitting(false);
     }

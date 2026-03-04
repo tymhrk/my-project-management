@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { apiClient } from "@/lib/apiClient";
+import { deleteAction } from "@/lib/actions";
 import ConfirmModal from "./ConfirmModal";
 
 interface DeleteButtonProps {
   endpoint: string;
-  message?: string;
   title?: string;
+  message?: string;
   redirectPath?: string;
   onSuccess?: () => void;
 }
@@ -28,23 +28,27 @@ export default function DeleteButton({
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
-      await apiClient(endpoint, { method: "DELETE" });
-      toast.success("削除しました");
+      const result = await deleteAction(endpoint);
 
-      setShowConfirm(false);
+      if (result.success) {
+        toast.success("削除しました");
+        setShowConfirm(false);
 
-      if (onSuccess) {
-        onSuccess();
-      }
+        if (onSuccess) {
+          onSuccess();
+        }
 
-      router.refresh();
+        router.refresh();
 
-      if (redirectPath) {
-        router.push(redirectPath);
+        if (redirectPath) {
+          router.push(redirectPath);
+        }
+      } else {
+        toast.error("削除に失敗しました");
       }
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "削除に失敗しました",
+        error instanceof Error ? error.message : "通信エラーが発生しました",
       );
     } finally {
       setIsDeleting(false);
@@ -54,12 +58,14 @@ export default function DeleteButton({
   return (
     <>
       <button
+        type="button"
         onClick={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           setShowConfirm(true);
         }}
         disabled={isDeleting}
-        className="group p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
+        className="group p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 disabled:opacity-50"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

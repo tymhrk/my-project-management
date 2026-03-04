@@ -179,6 +179,7 @@ export default function ProjectList({ initialProjects }: ProjectListProps) {
                 </Link>
 
                 <DeleteButton
+                  // 1. 削除対象のパスを明示（Railsのルートに合わせる）
                   endpoint={`/projects/${project.id}`}
                   title="プロジェクトの削除"
                   message={`「${project.name}」を削除しますか？`}
