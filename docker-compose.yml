@@ -18,6 +18,7 @@ services:
       - RAILS_ENV=development
     volumes:
       - ./backend:/app
+      - /app/tmp/cache
     ports:
       - "3000:3000"
     depends_on:
@@ -29,7 +30,8 @@ services:
     env_file:
       - ./.env
     environment:
-      - WATCHPACK_POLLING=true
+      - HOSTNAME=0.0.0.0
+      - PORT=3000
     volumes:
       - ./frontend:/app
       - /app/node_modules
