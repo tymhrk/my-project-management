@@ -5,6 +5,9 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     services:
       postgres:
         image: postgres:16
@@ -20,9 +23,6 @@ jobs:
         ports: ["5432:5432"]
     env:
       RAILS_ENV: test
-    defaults:
-      run:
-        working-directory: ./backend
     steps:
       - uses: actions/checkout@v4
       - name: Set up Ruby
