@@ -8,6 +8,11 @@ jobs:
     services:
       postgres:
         image: postgres:16
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
         env:
           POSTGRES_DB: test_project_management
           POSTGRES_USER: postgres
@@ -15,7 +20,6 @@ jobs:
         ports: ["5432:5432"]
     env:
       RAILS_ENV: test
-      DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
     defaults:
       run:
         working-directory: ./backend
