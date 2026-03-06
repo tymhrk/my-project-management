@@ -5,9 +5,6 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
     services:
       postgres:
         image: postgres:16
@@ -23,6 +20,7 @@ jobs:
         ports: ["5432:5432"]
     env:
       RAILS_ENV: test
+      BUNDLE_GEMFILE: backend/Gemfile
     steps:
       - uses: actions/checkout@v4
 
@@ -31,11 +29,14 @@ jobs:
         with:
           ruby-version: "3.3.2"
           bundler-cache: true
-          working-directory: ./backend
+          working-directory: backend
 
       - name: Database setup
         run: |
+          cd backend
           bundle exec rails db:prepare
 
       - name: Run RSpec
-        run: bundle exec rspec
+        run: |
+          cd backend
+          bundle exec rspec
