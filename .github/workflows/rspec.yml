@@ -31,6 +31,8 @@ jobs:
       - name: Database setup
         run: |
           cd backend
+          DATABASE_URL=postgres://postgres:password@127.0.0.1:5432/test_project_management \
+          bundle exec rails db:prepare
           bundle config set --local deployment 'true'
           bundle install
           RAILS_ENV=test bundle exec rails db:prepare
@@ -38,4 +40,6 @@ jobs:
       - name: Run RSpec
         run: |
           cd backend
+          DATABASE_URL=postgres://postgres:password@127.0.0.1:5432/test_project_management \
+          bundle exec rspec
           RAILS_ENV=test bundle exec rspec
