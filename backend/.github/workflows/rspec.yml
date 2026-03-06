@@ -27,13 +27,14 @@ jobs:
         with:
           ruby-version: "3.3.2"
           bundler-cache: true
+          working-directory: backend
 
       - name: Database setup
         run: |
           cd backend
-          RAILS_ENV=test DATABASE_URL=postgres://postgres:password@localhost:5432/test_project_management bundle exec rails db:prepare
+          bundle exec rails db:prepare
 
       - name: Run RSpec
         run: |
           cd backend
-          RAILS_ENV=test DATABASE_URL=postgres://postgres:password@localhost:5432/test_project_management bundle exec rspec
+          bundle exec rspec
