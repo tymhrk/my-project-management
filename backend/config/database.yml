@@ -10,5 +10,9 @@ development:
   <<: *default
   database: <%= ENV['POSTGRES_DB'] || 'dev_project_management' %>
 
+test:
+  <<: *default
+  database: test_project_management
+
 production:
   url: <%= ENV['DATABASE_URL'] %>
