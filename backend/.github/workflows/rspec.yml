@@ -25,11 +25,17 @@ jobs:
       RAILS_ENV: test
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: "3.3.2"
           bundler-cache: true
+          working-directory: ./backend
+
       - name: Database setup
-        run: bin/rails db:prepare
+        run: |
+          bundle exec rails db:prepare
+
       - name: Run RSpec
         run: bundle exec rspec
