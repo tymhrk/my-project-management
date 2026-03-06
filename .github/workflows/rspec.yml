@@ -5,20 +5,6 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        env:
-          POSTGRES_DB: test_project_management
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-        ports: ["5432:5432"]
-
     steps:
       - uses: actions/checkout@v4
 
@@ -27,16 +13,7 @@ jobs:
         with:
           ruby-version: "3.3.2"
           bundler-cache: true
-          working-directory: backend # ここで backend を指定
-
-      - name: Database setup
-        # cd して確実に移動してから実行
-        run: |
-          cd backend
-          bundle exec rails db:prepare
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
+          working-directory: backend
 
       - name: Run RSpec
         run: |
@@ -44,4 +21,3 @@ jobs:
           bundle exec rspec
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
