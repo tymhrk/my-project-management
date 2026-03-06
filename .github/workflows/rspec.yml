@@ -27,16 +27,16 @@ jobs:
         with:
           ruby-version: "3.3.2"
           bundler-cache: true
-          working-directory: backend
+          working-directory: backend # ここで backend を指定
 
       - name: Database setup
+        # cd して確実に移動してから実行
         run: |
           cd backend
-          bundle install
           bundle exec rails db:prepare
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:password@127.0.0.1:5432/test_project_management
+          DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
 
       - name: Run RSpec
         run: |
@@ -44,4 +44,4 @@ jobs:
           bundle exec rspec
         env:
           RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:password@127.0.0.1:5432/test_project_management
+          DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
