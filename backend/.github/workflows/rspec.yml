@@ -20,10 +20,13 @@ jobs:
         ports: ["5432:5432"]
     env:
       RAILS_ENV: test
-      BUNDLE_GEMFILE: backend/Gemfile
-    steps:
-      - uses: actions/checkout@v4
 
+    steps:
+      - name: Check Where Am I
+        run: |
+          pwd
+          ls -F
+      - uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -32,11 +35,7 @@ jobs:
           working-directory: backend
 
       - name: Database setup
-        run: |
-          cd backend
-          bundle exec rails db:prepare
+        run: cd backend && bundle exec rails db:prepare
 
       - name: Run RSpec
-        run: |
-          cd backend
-          bundle exec rspec
+        run: cd backend && bundle exec rspec
