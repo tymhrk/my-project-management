@@ -2,9 +2,17 @@ name: RSpec Tests
 
 on: [push, pull_request]
 
+defaults:
+  run:
+    working-directory: backend
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
+
     services:
       postgres:
         image: postgres:16
@@ -30,17 +38,7 @@ jobs:
           working-directory: backend
 
       - name: Database setup
-        run: |
-          cd backend
-          bundle exec rails db:prepare
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
+        run: bundle exec rails db:prepare
 
       - name: Run RSpec
-        run: |
-          cd backend
-          bundle exec rspec
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
+        run: bundle exec rspec
