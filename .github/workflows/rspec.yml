@@ -47,10 +47,6 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           npm install -g @railway/cli
-          # 現在地を確認（デバッグ用）
-          ls -F
-          # もし backend というフォルダがあるか確認
-          cd backend
           railway up --service "backend" --detach
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
