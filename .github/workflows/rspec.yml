@@ -47,6 +47,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           npm install -g @railway/cli
+          cd backend
           railway up --service backend --detach
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
