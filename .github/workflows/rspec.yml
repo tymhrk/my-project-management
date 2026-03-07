@@ -43,13 +43,17 @@ jobs:
       - name: Run RSpec
         run: bundle exec rspec
 
-      - name: Deploy to Railway
+      - name: Debug and Deploy
         if: github.ref == 'refs/heads/main'
         run: |
           npm install -g @railway/cli
-          echo "--- 現在のディレクトリ一覧 ---"
+          echo "現在の場所 (PWD): $PWD"
+          echo "この場所にあるフォルダ一覧:"
           ls -F
-          echo "----------------------------"
+          # フォルダ移動を試みる
+          echo "backend ディレクトリへ移動します..."
+          cd backend && ls -F
+          # デプロイ実行
           railway up --service "backend" --detach
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
