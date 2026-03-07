@@ -31,7 +31,7 @@ frontend/node_modules/
 frontend/.next/
 frontend/out/
 frontend/build/
-# Vercelの環境変数は管理画面で設定するため、ローカルの.envは無視
+frontend/.vercel
 frontend/.env*
 
 # --- Deployment / Misc ---
