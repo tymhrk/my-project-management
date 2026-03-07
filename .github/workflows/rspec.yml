@@ -42,3 +42,12 @@ jobs:
 
       - name: Run RSpec
         run: bundle exec rspec
+
+      - name: Deploy to Railway
+        if: github.ref == 'refs/heads/main'
+        run: |
+          npm install -g @railway/cli
+          railway up --service backend --detach
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
