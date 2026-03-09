@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 const NEXT_PUBLIC_API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
 const INTERNAL_API_URL =
@@ -18,8 +20,13 @@ export async function apiClient<T>(
     headers.set("Content-Type", "application/json");
   }
 
-  if (typeof window === "undefined" && process.env.INTERNAL_API_KEY) {
+  if (typeof window === "undefined") {
     headers.set("Authorization", `Bearer ${process.env.INTERNAL_API_KEY}`);
+  } else {
+    const token = Cookies.get("jwt_token");
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
   }
 
   const res = await fetch(`${baseUrl}${endpoint}`, {

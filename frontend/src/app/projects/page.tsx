@@ -15,7 +15,7 @@ export default async function ProjectsPage() {
       <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6 text-center md:text-left">
         <div>
           <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">
-            プロジェクト管理
+            プロジェクト
           </h1>
           <p className="text-slate-500 mt-2">
             進行中のプロジェクトを管理しましょう

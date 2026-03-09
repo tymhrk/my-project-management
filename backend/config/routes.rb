@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
+      devise_for :users, as: :user, path: 'auth', controllers: {
+        sessions: 'api/v1/auth/sessions',
+        registrations: 'api/v1/auth/registrations'
+      }
+
       namespace :ai do
         resources :projects, only: [] do
           resources :task_generations, only: [ :create ]
