@@ -9,7 +9,6 @@
 *.swp
 
 # --- Backend (Rails) ---
-backend/.env
 backend/log/*.log
 backend/tmp/
 backend/storage/
@@ -35,8 +34,7 @@ frontend/.vercel
 frontend/.env*
 
 # --- Deployment / Misc ---
-.env
-.env.local
+**/.env*
 node_modules/
 .bundle/
 vendor/
