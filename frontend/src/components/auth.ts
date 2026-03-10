@@ -1,10 +1,10 @@
 import Cookies from "js-cookie";
 
-const INTERNAL_API_URL =
-  process.env.INTERNAL_API_URL || "http://backend:3000/api/v1";
+const NEXT_PUBLIC_API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api/v1";
 
 export async function login(email: string, password: string) {
-  const res = await fetch(`${INTERNAL_API_URL}/auth/sign_in`, {
+  const res = await fetch(`${NEXT_PUBLIC_API_URL}/auth/sign_in`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ user: { email, password } }),
