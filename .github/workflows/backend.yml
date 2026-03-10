@@ -9,10 +9,6 @@ defaults:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      RAILS_ENV: test
-      DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
-
     services:
       postgres:
         image: postgres:16
@@ -41,6 +37,9 @@ jobs:
         run: bundle exec rails db:prepare
 
       - name: Run RSpec
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
         run: bundle exec rspec
 
       - name: Deploy to Railway
