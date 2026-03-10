@@ -1,4 +1,4 @@
-name: backtend CI/CD
+name: Backend CI
 
 on: [push, pull_request]
 
@@ -9,6 +9,9 @@ defaults:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
     services:
       postgres:
         image: postgres:16
@@ -31,22 +34,9 @@ jobs:
         with:
           ruby-version: "3.3.2"
           bundler-cache: true
-          working-directory: backend
 
       - name: Database setup
         run: bundle exec rails db:prepare
 
       - name: Run RSpec
-        env:
-          RAILS_ENV: test
-          DATABASE_URL: postgres://postgres:password@localhost:5432/test_project_management
         run: bundle exec rspec
-
-      - name: Deploy to Railway
-        if: github.ref == 'refs/heads/main'
-        run: |
-          npm install -g @railway/cli
-          railway up --service "backend" --detach
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
