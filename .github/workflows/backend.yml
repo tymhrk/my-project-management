@@ -46,8 +46,8 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           npm install -g @railway/cli
-          railway up --service "backend" --detach
-          railway run bundle exec rails db:migrate
+          railway up --service "backend"
+          railway run --service "backend" bundle exec rails db:migrate
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
