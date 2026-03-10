@@ -2,13 +2,11 @@
 
 import { useState } from "react";
 import { login } from "./auth";
-import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,9 +14,7 @@ export default function LoginForm() {
 
     try {
       await login(email, password);
-      window.dispatchEvent(new Event("auth-changed"));
-      await router.push("/projects");
-      router.refresh();
+      window.location.href = "/projects";
     } catch {
       setError("メールアドレスまたはパスワードが正しくありません");
     }
