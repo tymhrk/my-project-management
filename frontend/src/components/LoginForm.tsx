@@ -13,10 +13,11 @@ export default function LoginForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+
     try {
       await login(email, password);
       window.dispatchEvent(new Event("auth-changed"));
-      router.push("/projects");
+      await router.push("/projects");
       router.refresh();
     } catch {
       setError("メールアドレスまたはパスワードが正しくありません");
