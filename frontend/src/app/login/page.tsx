@@ -1,6 +1,7 @@
 "use client";
 
 import LoginForm from "@/components/LoginForm";
+import { Suspense } from "react";
 
 export default function LoginPage() {
   return (
@@ -9,7 +10,9 @@ export default function LoginPage() {
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
           ログイン
         </h2>
-        <LoginForm />
+        <Suspense fallback={<div>読み込み中...</div>}>
+          <LoginForm />
+        </Suspense>
       </div>
     </div>
   );
