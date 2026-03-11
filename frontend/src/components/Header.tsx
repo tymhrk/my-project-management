@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { logout } from "./auth";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const checkStatus = () => {
@@ -44,7 +46,7 @@ export default function Header() {
             </button>
           ) : (
             <Link
-              href="/login"
+              href={`/login?from=${encodeURIComponent(pathname)}`}
               className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full font-medium transition-all shadow-sm"
             >
               ログイン

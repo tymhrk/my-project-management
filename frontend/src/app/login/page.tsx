@@ -1,19 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import LoginForm from "@/components/LoginForm";
 
 export default function LoginPage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    const token = localStorage.getItem("jwt_token");
-    if (token) {
-      router.push("/projects");
-    }
-  }, [router]);
-
   return (
     <div className="h-[calc(100vh-72px)] w-full flex items-center justify-center bg-gray-50 overflow-hidden">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-sm border border-gray-100">

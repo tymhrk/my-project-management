@@ -14,7 +14,12 @@ export async function login(email: string, password: string) {
 
   const data = await res.json();
 
-  Cookies.set("jwt_token", data.token, { expires: 7, secure: true });
+  Cookies.set("jwt_token", data.token, {
+    expires: 7,
+    path: "/", // 重要：どのパスでも読み取れるようにする
+    // secure: true, // localhostでテスト中なら一時的にコメントアウトして試す
+    sameSite: "Lax",
+  });
   return data;
 }
 
