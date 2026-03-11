@@ -1,34 +1,15 @@
 class Api::V1::BaseController < ActionController::API
-  # before_action :authenticate_request!
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
+  include ActionController::Cookies
+  include ActionController::MimeResponds
 
   private
 
-  def authenticate_request!
-    # Wardenの authenticate! を使ってJWT認証を試みる
-    # 失敗しても例外を出さず、nil を返すようにする
-    begin
-      user = warden.authenticate(scope: :user)
-    rescue
-      user = nil
-    end
-
-    # JWTで認証できた場合、current_user をセットして続行
-    if user
-      @current_user = user
-      return
-    end
-
-    # JWTで認証できなかった場合、APIキーを確認
-    auth_header = request.headers['Authorization']
-    token = auth_header&.split(' ')&.last
-    
-    unless token == ENV["INTERNAL_API_KEY"]
-      render json: { error: 'Unauthorized' }, status: :unauthorized
-    end
+  def render_not_found(e)
+    render json: { error: e.message }, status: :not_found
   end
 
-  # 便利メソッドとして定義
   def current_user
-    @current_user
+    @current_user ||= warden.authenticate(scope: :user)
   end
 end

@@ -10,7 +10,6 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const searchParams = useSearchParams();
   const from = searchParams.get("from") || "/";
-  console.log("移動先はここだ:", from);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

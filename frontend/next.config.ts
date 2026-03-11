@@ -4,12 +4,20 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        // ブラウザからの "/api/v1/..." というリクエストを
         source: "/api/v1/:path*",
-        // Docker ネットワーク内の Rails "/api/v1/..." へ転送
-        destination: "http://backend:3000/api/v1/:path*",
+        destination: `${process.env.INTERNAL_API_URL}/:path*`,
       },
     ];
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: (process.env.IMAGE_PROTOCOL as "http" | "https") || "http",
+        hostname: process.env.IMAGE_HOSTNAME || "localhost",
+        pathname: "/rails/active_storage/**",
+      },
+    ],
+    unoptimized: true,
   },
 };
 

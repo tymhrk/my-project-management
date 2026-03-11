@@ -6,6 +6,8 @@ Rails.application.routes.draw do
         registrations: 'api/v1/auth/registrations'
       }
 
+      resource :profile, only: [:show, :update], controller: 'users'
+
       namespace :ai do
         resources :projects, only: [] do
           resources :task_generations, only: [ :create ]

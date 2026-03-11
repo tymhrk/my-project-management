@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_one_attached :avatar
+
   include Devise::JWT::RevocationStrategies::JTIMatcher
 
   devise :database_authenticatable, :registerable,

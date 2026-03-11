@@ -32,6 +32,7 @@ export async function apiClient<T>(
   const res = await fetch(`${baseUrl}${endpoint}`, {
     ...options,
     headers,
+    credentials: "include",
   });
 
   if (!res.ok) {

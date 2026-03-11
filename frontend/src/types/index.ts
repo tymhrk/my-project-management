@@ -21,7 +21,18 @@ export interface Task {
   created_at: string;
 }
 
-export interface AiTask {
+export interface Task {
+  id: string;
   name: string;
-  description: string;
+  description?: string;
+  status: "todo" | "doing" | "done";
+  project_id: string;
+  created_at: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  bio: string;
+  avatar_url: string;
 }
