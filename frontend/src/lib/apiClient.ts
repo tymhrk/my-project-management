@@ -16,8 +16,10 @@ export async function apiClient<T>(
   const baseUrl = await getBaseUrl();
   const headers = new Headers(options.headers);
 
-  if (!headers.has("Content-Type")) {
-    headers.set("Content-Type", "application/json");
+  if (!(options.body instanceof FormData)) {
+    if (!headers.has("Content-Type")) {
+      headers.set("Content-Type", "application/json");
+    }
   }
 
   if (typeof window === "undefined") {

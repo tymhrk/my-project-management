@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { apiClient } from "@/lib/apiClient";
 
 export const useProfileForm = (initialData: { name: string; bio: string }) => {
   const router = useRouter();
@@ -26,20 +27,15 @@ export const useProfileForm = (initialData: { name: string; bio: string }) => {
     if (file) formData.append("user[avatar]", file);
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/profile`,
-        {
-          method: "PATCH",
-          credentials: "include",
-          body: formData,
-        },
-      );
-
-      if (!response.ok) throw new Error("更新に失敗しました");
+      await apiClient("/profile", {
+        method: "PATCH",
+        body: formData,
+        headers: {},
+      });
 
       toast.success("更新しました");
       router.push("/profile");
-      router.refresh(); // キャッシュを更新して新しい画像を反映
+      router.refresh();
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "予期せぬエラーが発生しました",
