@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import ProjectAiButton from "./ProjectAiButton";
 import TaskList from "./TaskList";
 import ConfirmModal from "./ConfirmModal";
-import { Task, AiTask } from "@/types";
+import { Task } from "@/types";
 import toast from "react-hot-toast";
 
 type Props = {
@@ -16,17 +16,17 @@ type Props = {
 
 export default function TaskSection({ projectId, initialTasks }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [aiTasks, setAiTasks] = useState<AiTask[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
-  const handleAiSuccess = (tasks: AiTask[]) => {
-    setAiTasks(tasks);
+  const handleAiSuccess = (tasks: Task[]) => {
+    setTasks(tasks);
     setIsModalOpen(true);
   };
 
   const handleConfirmSave = async () => {
-    if (aiTasks.length === 0) return;
+    if (tasks.length === 0) return;
 
     setIsSubmitting(true);
     try {
@@ -35,7 +35,7 @@ export default function TaskSection({ projectId, initialTasks }: Props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           projectId,
-          tasks: aiTasks.map((t) => ({
+          tasks: tasks.map((t) => ({
             name: t.name,
             description: t.description || "",
           })),
@@ -47,7 +47,7 @@ export default function TaskSection({ projectId, initialTasks }: Props) {
       }
 
       setIsModalOpen(false);
-      setAiTasks([]);
+      setTasks([]);
 
       router.refresh();
 
@@ -92,7 +92,7 @@ export default function TaskSection({ projectId, initialTasks }: Props) {
       >
         <div className="mt-4 mb-5 max-h-[40vh] overflow-y-auto pr-2">
           <ul className="space-y-3">
-            {aiTasks.map((task, idx) => (
+            {tasks.map((task, idx) => (
               <li
                 key={idx}
                 className="p-3 bg-gray-50 rounded-lg text-sm border border-gray-100 shadow-sm"
