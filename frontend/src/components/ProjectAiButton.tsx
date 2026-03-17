@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { AiTask } from "@/types";
+import { Task } from "@/types";
 import toast from "react-hot-toast";
 
 type Props = {
   projectId: string;
-  onSuccess: (tasks: AiTask[]) => void;
+  onSuccess: (tasks: Task[]) => void;
 };
 
 export default function ProjectAiButton({ projectId, onSuccess }: Props) {

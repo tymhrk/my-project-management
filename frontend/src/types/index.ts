@@ -21,15 +21,6 @@ export interface Task {
   created_at: string;
 }
 
-export interface Task {
-  id: string;
-  name: string;
-  description?: string;
-  status: "todo" | "doing" | "done";
-  project_id: string;
-  created_at: string;
-}
-
 export interface User {
   id: string;
   name: string;
