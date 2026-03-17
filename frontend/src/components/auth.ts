@@ -16,9 +16,9 @@ export async function login(email: string, password: string) {
 
   Cookies.set("jwt_token", data.token, {
     expires: 7,
-    path: "/", // 重要：どのパスでも読み取れるようにする
-    // secure: true, // localhostでテスト中なら一時的にコメントアウトして試す
-    sameSite: "Lax",
+    path: "/",
+    secure: process.env.NODE_ENV === "production",
+    same_site: process.env.NODE_ENV === "production" ? "none" : "lax",
   });
   return data;
 }
