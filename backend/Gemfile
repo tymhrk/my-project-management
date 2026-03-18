@@ -78,4 +78,10 @@ group :development, :test do
 
   # Dotenv-rails
   gem 'dotenv-rails'
+
+  # FactoryBot
+  gem 'factory_bot_rails'
+
+  # Faker
+  gem 'faker'
 end
