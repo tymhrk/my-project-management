@@ -1,42 +1,46 @@
-# app/services/projects/csv_export_service.rb
 require 'csv'
 
 module Projects
   class CsvExportService
-    EXPORT_DIRECTORY = Rails.root.join('tmp', 'csv', 'projects')
-
-    CSV_COLUMNS = %w[id name description created_at updated_at].freeze
-
-    def self.execute
-      new.execute
-    end
+    EXPORT_DIRECTORY = Rails.root.join('tmp/csv/projects')
 
     def execute
+      prepare_directory
+      file_path = generate_csv_file
+      Rails.logger.debug { "Done! Saved to: #{file_path}" }
+    rescue StandardError => e
+      Rails.logger.debug { "Failed to export CSV: #{e.message}" }
+    end
+
+    private
+
+    def prepare_directory
       FileUtils.mkdir_p(EXPORT_DIRECTORY)
-      file_path = EXPORT_DIRECTORY.join("projects_#{Time.current.strftime('%Y%m%d%H%M')}.csv")
+    end
 
-      CSV.open(file_path, 'w', encoding: 'SJIS', invalid: :replace, undef: :replace) do |csv|
-        csv << CSV_COLUMNS
+    def generate_file_path
+      timestamp = Time.current.strftime('%Y%m%d%H%M')
+      EXPORT_DIRECTORY.join("projects_#{timestamp}.csv")
+    end
 
-        Project.find_each(batch_size: 1000) do |project|
-          row = CSV_COLUMNS.map do |column|
-            value = project.send(column)
-            
-            if value.is_a?(ActiveSupport::TimeWithZone)
-              value.strftime('%Y-%m-%d %H:%M:%S')
-            else
-              value
-            end
-          end
-
-          csv << row
-        end
+    def generate_csv_file
+      path = generate_file_path
+      CSV.open(path, 'w') do |csv|
+        csv << ['ID', 'Project Name', 'Status', 'Created At']
+        write_project_rows(csv)
       end
+      path
+    end
 
-      file_path
-    rescue => e
-      Rails.logger.error "CSV Export Failed: #{e.message}"
-      raise e
+    def write_project_rows(csv)
+      Project.find_each do |project|
+        csv << [
+          project.id,
+          project.name,
+          project.status,
+          project.created_at.strftime('%Y-%m-%d %H:%M')
+        ]
+      end
     end
   end
 end

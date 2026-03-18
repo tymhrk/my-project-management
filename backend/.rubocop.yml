@@ -1,8 +1,47 @@
-# Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+plugins:
+  - rubocop-rails
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+AllCops:
+  NewCops: enable
+  Exclude:
+    - "bin/**/*"
+    - "db/schema.rb"
+    - "db/migrate/*"
+    - "config/environments/*"
+    - "vendor/**/*"
+    - "node_modules/**/*"
+    - "config/initializers/devise.rb"
+
+# 日本語のコメントを許可する
+Style/AsciiComments:
+  Enabled: false
+
+# クラスの上の説明コメント（frozen_string_literal）を強制しない
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# クラスの説明（Documentation）を強制しない
+Style/Documentation:
+  Enabled: false
+
+# テストコードの長さ制限を無効化（テストは長くなりがちなので）
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+
+# 1行の長さ制限を少し緩める（120文字 → 160文字など）
+Layout/LineLength:
+  Max: 160
+
+# メソッドの長さを10行から20行に緩和する（現実的なライン）
+Metrics/MethodLength:
+  Max: 20
+
+Naming/MethodParameterName:
+  AllowedNames:
+    - e
+    - id
+    - i
+
+Rails/SkipsModelValidations:
+  Enabled: false

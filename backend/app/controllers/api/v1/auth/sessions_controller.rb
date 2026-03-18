@@ -9,16 +9,16 @@ module Api
 
           if user&.valid_password?(params[:user][:password])
             warden.set_user(user, scope: :user)
-            
+
             token = Warden::JWTAuth::UserEncoder.new.call(user, :user, nil).first
 
             render json: {
-              message: "Logged in successfully",
+              message: 'Logged in successfully',
               user: { email: user.email },
               token: token
             }, status: :ok
           else
-            render json: { error: "Invalid email or password" }, status: :unauthorized
+            render json: { error: 'Invalid email or password' }, status: :unauthorized
           end
         end
       end

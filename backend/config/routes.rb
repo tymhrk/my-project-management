@@ -6,25 +6,25 @@ Rails.application.routes.draw do
         registrations: 'api/v1/auth/registrations'
       }
 
-      resource :profile, only: [:show, :update], controller: 'users'
+      resource :profile, only: %i[show update], controller: 'users'
 
       namespace :ai do
         resources :projects, only: [] do
-          resources :task_generations, only: [ :create ]
+          resources :task_generations, only: [:create]
         end
       end
 
       resources :projects do
-        resources :tasks, only: [ :index, :create ] do
+        resources :tasks, only: %i[index create] do
           collection do
             post :bulk_create
           end
         end
       end
 
-      resources :tasks, only: [ :show, :update, :destroy ]
+      resources :tasks, only: %i[show update destroy]
     end
   end
 
-  get "up" => "rails/health#show", as: :rails_health_check
+  get 'up' => 'rails/health#show', as: :rails_health_check
 end

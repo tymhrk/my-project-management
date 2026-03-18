@@ -36,6 +36,9 @@ jobs:
           bundler-cache: true
           working-directory: backend
 
+      - name: Run RuboCop
+        run: bundle exec rubocop
+
       - name: Database setup
         run: bundle exec rails db:prepare
 

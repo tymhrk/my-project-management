@@ -1,39 +1,47 @@
-class Api::V1::AuthController < Api::V1::BaseController
-  before_action :authenticate_request!
+module Api
+  module V1
+    class AuthController < Api::V1::BaseController
+      before_action :authenticate_request!
+      attr_reader :current_user
 
-  def current_user
-    @current_user
-  end
+      private
 
-  private
+      def authenticate_request!
+        @current_user = find_user_by_internal_key || find_user_from_token
+        render_unauthorized unless @current_user
+      end
 
-  def authenticate_request!
-    auth_header = request.headers['Authorization']
-    token = auth_header&.split(' ')&.last
+      def find_user_by_internal_key
+        token = http_auth_token
+        User.first if token.present? && token == ENV['INTERNAL_API_KEY']
+      end
 
-    token ||= cookies[:jwt_token]
+      def find_user_from_token
+        token = http_auth_token
+        return nil if token.blank?
 
-    if token.present? && token == ENV["INTERNAL_API_KEY"]
-      @current_user = User.first
-      return 
-    end
+        decoded = decode_token(token)
+        return nil unless decoded
 
-    if token.present?
-      begin
-        decoded = JWT.decode(token, ENV['DEVISE_JWT_SECRET_KEY'], true, { algorithm: 'HS256' })
-        payload = decoded[0]
-        
-        @user = User.find_by(id: payload['sub'], jti: payload['jti'])
-        
-        if @user
-          @current_user = @user
-          return 
-        end
+        User.find_by(id: decoded[:sub], jti: decoded[:jti])
+      end
+
+      def http_auth_token
+        request.headers['Authorization']&.split&.last || cookies[:jwt_token]
+      end
+
+      def decode_token(token)
+        secret = ENV['DEVISE_JWT_SECRET_KEY'] || Warden::JWTAuth.config.secret
+        body = JWT.decode(token, secret, true, { algorithm: 'HS256' })[0]
+        body.with_indifferent_access
       rescue JWT::DecodeError => e
         Rails.logger.error "JWT Decode Error: #{e.message}"
+        nil
+      end
+
+      def render_unauthorized
+        render json: { error: 'Unauthorized' }, status: :unauthorized
       end
     end
-
-    render json: { error: 'Unauthorized' }, status: :unauthorized
   end
 end
