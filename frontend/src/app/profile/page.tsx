@@ -69,37 +69,47 @@ export default function MyPage() {
         <div className="md:col-span-2 space-y-8">
           <section className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              活動状況
+              アクティビティ
             </h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <p className="text-sm text-gray-500">参加中プロジェクト</p>
-                <p className="text-2xl font-bold text-gray-800">3</p>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="p-4 bg-blue-50 rounded-xl">
+                <p className="text-sm text-gray-500">TODO</p>
+                <p className="text-2xl font-bold text-gray-800">
+                  {user.task_counts?.todo || 0}
+                </p>
+              </div>
+              <div className="p-4 bg-green-50 rounded-xl">
+                <p className="text-sm text-gray-500">DOING</p>
+                <p className="text-2xl font-bold text-gray-800">
+                  {user.task_counts?.doing || 0}
+                </p>
               </div>
               <div className="p-4 bg-gray-50 rounded-xl">
-                <p className="text-sm text-gray-500">完了タスク</p>
-                <p className="text-2xl font-bold text-gray-800">12</p>
+                <p className="text-sm text-gray-500">DONE</p>
+                <p className="text-2xl font-bold text-gray-800">
+                  {user.task_counts?.done || 0}
+                </p>
               </div>
             </div>
           </section>
 
           <section className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              最近参加したプロジェクト
+              マイプロジェクト（{user.projects?.length || 0}）
             </h2>
             <div className="space-y-3">
-              {[
-                "新しいWebサイト構築",
-                "マーケティング分析",
-                "在庫管理システム",
-              ].map((proj) => (
+              {user.projects?.map((project) => (
                 <div
-                  key={proj}
+                  key={project.id}
                   className="flex justify-between items-center p-4 border border-gray-50 rounded-xl"
                 >
-                  <span className="font-medium text-gray-800">{proj}</span>
-                  <span className="text-xs text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-                    進行中
+                  <span className="font-medium text-gray-800">
+                    <Link
+                      href={`/projects/${project.id}`}
+                      className="hover:text-blue-600"
+                    >
+                      {project.name}
+                    </Link>
                   </span>
                 </div>
               ))}

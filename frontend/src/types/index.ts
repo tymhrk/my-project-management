@@ -26,4 +26,10 @@ export interface User {
   name: string;
   bio: string;
   avatar_url: string;
+  projects: Project[];
+  task_counts?: {
+    todo: number;
+    doing: number;
+    done: number;
+  };
 }
