@@ -2,7 +2,7 @@ class User < ApplicationRecord
   has_one_attached :avatar
   has_many :project_members, dependent: :destroy
   has_many :projects, through: :project_members
-  has_many :assigned_tasks, class_name: 'Task', foreign_key: 'user_id'
+  has_many :assigned_tasks, class_name: 'Task', dependent: :nullify
 
   include Devise::JWT::RevocationStrategies::JTIMatcher
 
@@ -14,11 +14,11 @@ class User < ApplicationRecord
 
   def task_counts
     counts = assigned_tasks.group(:status).count
-    
+
     {
-      todo: counts["todo"] || 0,
-      doing: counts["doing"] || 0,
-      done: counts["done"] || 0
+      todo: counts['todo'] || 0,
+      doing: counts['doing'] || 0,
+      done: counts['done'] || 0
     }
   end
 end

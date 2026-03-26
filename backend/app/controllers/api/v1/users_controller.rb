@@ -23,7 +23,8 @@ module Api
       def render_profile(user)
         return render json: { error: 'Unauthorized' }, status: :unauthorized if user.nil?
 
-        render json: user.as_json(include: :projects).merge(avatar_url: user.avatar.attached? ? url_for(user.avatar) : nil, task_counts: current_user.task_counts)
+        render json: user.as_json(include: :projects).merge(avatar_url: user.avatar.attached? ? url_for(user.avatar) : nil,
+                                                            task_counts: current_user.task_counts)
       end
 
       def user_params
