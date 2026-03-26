@@ -15,5 +15,8 @@ module App
     config.generators do |g|
       g.orm :active_record, primary_key_type: :uuid
     end
+    config.active_job.queue_adapter = :sidekiq
+    config.middleware.use ActionDispatch::Cookies
+    config.middleware.use ActionDispatch::Session::CookieStore, key: '_interslice_session'
   end
 end
